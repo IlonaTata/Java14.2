@@ -1,10 +1,22 @@
 package ru.netology;
-
 public class ProductRepository {
     private Product[] types = new Product[0];
-    private Product[] type = new Product[0];
+    public Product findById(int id) {
+        for (Product type : types) {
+            if (type.getId() == id) {
+                return type;
+            }
+        }
+        return null;
+    }
+
 
     public void save(Product type) {
+       if(findById(type.getId()) == type) {
+           throw new AlreadyExistsException(
+                   "Element with id"  + type.getId() +  "exist"
+           );
+        }
         Product[] tmp = new Product[types.length + 1];
         for (int i = 0; i < types.length; i++) {
             tmp[i] = types[i];
@@ -15,15 +27,6 @@ public class ProductRepository {
 
     public Product[] findAll() {
         return types;
-    }
-
-    public Product findById(int id) {
-        for (Product type : types) {
-            if (type.getId() == id) {
-                return type;
-            }
-        }
-        return null;
     }
 
     public void removeById(int id) {

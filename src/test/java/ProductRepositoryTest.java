@@ -20,13 +20,17 @@ public class ProductRepositoryTest {
     @Test
     public void shouldSave() {
         ProductRepository repo = new ProductRepository();
-        repo.save(type1);
+        Product type1 = new Product(1, ":Жизнь", 200);
+        Product type2 = new Book(1, ":Учеба", 300, "Акунин");
+        Product type3 = new Smartphone(3, ":Телефон", 400, "Москва");
+
         repo.save(type2);
+        repo.save(type1);
         repo.save(type3);
-        repo.findAll();
-        Product[] expected = {type1, type2, type3};
-        Product[] actual = repo.findAll();
-        Assertions.assertArrayEquals(expected, actual);
+
+        Assertions.assertThrows(AlreadyExistsException.class, () -> {
+            repo.save(type2);
+        });
     }
     @Test
     public void shouldRemoveById(){
@@ -40,6 +44,7 @@ public class ProductRepositoryTest {
         Product[]actual=repo.findAll();
         Assertions.assertArrayEquals(expected, actual);
     }
+
     @Test
     public void shouldExceptionsById(){
         ProductRepository repo = new ProductRepository();
